@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { MailService as SendGridMailService } from '@sendgrid/mail';
 import { AppConfigService } from '@src/common/shared/services/app-config.service';
-import { UserEntity } from '@src/modules/user/user.entity';
+import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { APP_DEFAULT_MAIL_SENDER, SENDGRID_PROVIDER } from './constant';
 
 const RESET_PASSWORD_TEMPLATE_ID = 'd-0bfef0d064de44e39cb320a7a929847c';

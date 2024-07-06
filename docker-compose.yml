@@ -2,12 +2,12 @@ version: '3.8'
 services:
   db:
     image: postgres:latest
-    container_name: gear_shop
+    container_name: e_shop
     restart: always
     environment:
       POSTGRES_USER: an_nguyen
       POSTGRES_PASSWORD: 123456a@
-      POSTGRES_DB: gear_shop
+      POSTGRES_DB: e_shop
     volumes:
       - ./database:/var/lib/postgresql/data
     ports:

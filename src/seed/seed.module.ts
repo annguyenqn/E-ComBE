@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SharedModule } from '@src/common/shared/shared.module';
-import { UserEntity } from '@src/modules/user/user.entity';
+import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { DatabaseModule } from 'src/common/database/database.module';
 import { SeedService } from './seed.service';
 

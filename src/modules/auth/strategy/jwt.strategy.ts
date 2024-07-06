@@ -5,7 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AppConfigService } from 'src/common/shared/services/app-config.service';
 import { AccessTokenPayload } from 'src/common/types';
 
-import { UserEntity } from 'src/modules/user/user.entity';
+import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { UserService } from 'src/modules/user/user.service';
 
 @Injectable()

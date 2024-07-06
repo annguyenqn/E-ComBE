@@ -9,7 +9,7 @@ import { AppConfigService } from 'src/common/shared/services/app-config.service'
 import { TokenService } from 'src/common/shared/services/token.service';
 import { AccessTokenPayload, RefreshTokenPayload } from 'src/common/types';
 import AppUtil from 'src/common/utils';
-import { UserEntity } from 'src/modules/user/user.entity';
+import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { UserService } from 'src/modules/user/user.service';
 import { AccessTokenResponse } from './dto/access-token.response';
 import { LoginResponse } from './dto/login.response';

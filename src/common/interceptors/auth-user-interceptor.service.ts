@@ -7,7 +7,7 @@ import {
 
 import { ContextProvider } from 'src/common/providers';
 import { AppRequest } from 'src/common/types/app-request.type';
-import { type UserEntity } from 'src/modules/user/user.entity';
+import { type UserEntity } from '@src/modules/user/entities/user.entity';
 
 @Injectable()
 export class AuthUserInterceptor implements NestInterceptor {

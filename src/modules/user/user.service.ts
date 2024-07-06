@@ -6,7 +6,7 @@ import { UserNotFoundException } from 'src/common/exceptions';
 import AppUtil from 'src/common/utils';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { UsersPageOptionsDto } from './dtos/users-page-options.dto';
-import { UserEntity } from './user.entity';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserService {

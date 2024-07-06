@@ -4,7 +4,7 @@ import { RoleType } from '@src/common/constants';
 import { Auth } from '@src/common/decorators';
 import { PaginationDto } from '@src/common/dto/paginate.dto';
 import { UsersPageOptionsDto } from './dtos/users-page-options.dto';
-import { UserEntity } from './user.entity';
+import { UserEntity } from './entities/user.entity';
 import { UserService } from './user.service';
 import { Request } from 'express';
 
