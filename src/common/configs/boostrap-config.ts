@@ -1,4 +1,8 @@
-import { ClassSerializerInterceptor, INestApplication } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import compression from 'compression';
 import helmet from 'helmet';
@@ -21,12 +25,13 @@ export default async function bootstrapConfig(app: INestApplication) {
   //Filter exclude fields
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  app
-    .useGlobalPipes
-    //  new ValidationPipe({
-    //    exceptionFactory: i18nValidationErrorFactory,
-    //  }),
-    ();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
   app.useGlobalInterceptors(
     //Filter exclude fields
     new ClassSerializerInterceptor(reflector),

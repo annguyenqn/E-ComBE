@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req } from '@nestjs/common';
+import { Controller, Get, Query, Req, Body, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoleType } from '@src/common/constants';
 import { Auth } from '@src/common/decorators';
@@ -7,6 +7,7 @@ import { UsersPageOptionsDto } from './dtos/users-page-options.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserService } from './user.service';
 import { Request } from 'express';
+import { CreateUserDto } from './dtos/create-user.dto';
 
 @Controller('users')
 @ApiTags('users')
@@ -41,8 +42,17 @@ export class UserController {
   @ApiBearerAuth()
   @Auth()
   async findUser(@Req() req: Request) {
-    console.log('this is req', req.user);
-    // return this.usersService.findUserByAccountID(id);
+    const user = req.user;
+    const keysToRemove = ['password', 'hashRefreshToken', 'hashRecoveryToken'];
+
+    return Object.fromEntries(
+      Object.entries(user ?? {}).filter(([key]) => !keysToRemove.includes(key)),
+    );
+  }
+
+  @Post()
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+    return this.userService.createUser(createUserDto);
   }
   //   @Get(':id')
   //   @Auth([RoleType.USER])

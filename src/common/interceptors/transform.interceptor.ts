@@ -7,12 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-interface IResponse<T> {
-  statusCode: HttpStatus;
-  data: T;
-  message: string;
-}
+import { IResponse } from 'src/common/types/respone.type';
 
 @Injectable()
 export class TransformInterceptor<T>
@@ -27,7 +22,10 @@ export class TransformInterceptor<T>
       map((response) => ({
         statusCode: HttpStatus.OK,
         data: response?.data ? response.data : response,
-        message: request.message,
+        message: request.message || 'Request successful',
+        isSuccess: true,
+        timestamp: new Date().toISOString(),
+        path: request.url,
       })),
     );
   }

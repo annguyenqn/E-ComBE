@@ -7,6 +7,7 @@ import AppUtil from 'src/common/utils';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { UsersPageOptionsDto } from './dtos/users-page-options.dto';
 import { UserEntity } from './entities/user.entity';
+import { CreateUserDto } from './dtos/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -79,6 +80,10 @@ export class UserService {
     await this.userRepository.update(userId, {
       hashRefreshToken: null,
     });
+  }
+  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const user = this.userRepository.create(createUserDto);
+    return this.userRepository.save(user);
   }
 
   async update(payload: Partial<UserEntity> & { id: number }) {

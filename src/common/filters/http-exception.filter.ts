@@ -16,6 +16,7 @@ export class HttpExceptionFilter {
     const { message, stack } = exception;
     Logger.error(JSON.stringify({ message, stack }));
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    let errors = message;
     //  let errors = AppHelper.constantExceptionErrors(
     //    message,
     //    i18n?.service,
@@ -23,6 +24,17 @@ export class HttpExceptionFilter {
     //  );
     if (exception instanceof HttpException) {
       status = exception.getStatus();
+      const exceptionResponse = exception.getResponse();
+
+      if (
+        typeof exceptionResponse === 'object' &&
+        Object.prototype.hasOwnProperty.call(exceptionResponse, 'message')
+      ) {
+        errors = (exceptionResponse as any).message;
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        errors = exceptionResponse;
+      }
 
       // errors = Array.isArray(exception.errors)
       //   ? formatI18nErrors(exception.errors, i18n?.service, lang)
@@ -34,8 +46,7 @@ export class HttpExceptionFilter {
     return response.status(status).json({
       isSuccess: false,
       code: status,
-      message,
-      errors: message,
+      errors,
       timestamp: new Date().toISOString(),
       path: request.url,
     });
