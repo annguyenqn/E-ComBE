@@ -6,6 +6,8 @@ import {
   Logger,
 } from '@nestjs/common';
 
+import { IResponse } from 'src/common/types/respone.type';
+
 @Catch()
 export class HttpExceptionFilter {
   catch(exception, host: ArgumentsHost) {
@@ -24,13 +26,13 @@ export class HttpExceptionFilter {
     //  );
     if (exception instanceof HttpException) {
       status = exception.getStatus();
-      const exceptionResponse = exception.getResponse();
+      const exceptionResponse = exception.getResponse() as IResponse;
 
       if (
         typeof exceptionResponse === 'object' &&
         Object.prototype.hasOwnProperty.call(exceptionResponse, 'message')
       ) {
-        errors = (exceptionResponse as any).message;
+        errors = exceptionResponse.message;
       } else {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         errors = exceptionResponse;

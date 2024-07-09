@@ -5,7 +5,7 @@ import {
   StringFieldOptional,
 } from 'src/common/decorators';
 import { RoleType } from 'src/common/constants';
-import { IsString, IsEmail, IsEnum } from 'class-validator';
+import { IsString, IsEmail, IsEnum, Matches, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @StringFieldOptional({ default: 'John' })
@@ -26,6 +26,11 @@ export class CreateUserDto {
 
   @StringField({ default: 'Password123!' })
   @IsString({ message: 'Password must be a string' })
+  @MinLength(8, { message: 'Password must be longer than 8 characters' })
+  @Matches(/^(?=.*[A-Z])(?=.*[!@#$&*])/, {
+    message:
+      'Password must contain at least one uppercase letter and one special character',
+  })
   readonly password?: string;
 
   @StringFieldOptional({ default: '123456789' })

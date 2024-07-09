@@ -11,6 +11,7 @@ import { SharedModule } from './common/shared/shared.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
 import { UserModule } from './modules/user/user.module';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { UserModule } from './modules/user/user.module';
     //    inject: [AppConfigService],
     //  }),
     HealthCheckerModule,
+    CloudinaryModule,
   ],
   providers: [],
 })
