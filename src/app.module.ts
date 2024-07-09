@@ -9,7 +9,6 @@ import { DatabaseModule } from './common/database/database.module';
 import { AppConfigService } from './common/shared/services/app-config.service';
 import { SharedModule } from './common/shared/shared.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
 import { UserModule } from './modules/user/user.module';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 
@@ -51,7 +50,6 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
     //    imports: [SharedModule],
     //    inject: [AppConfigService],
     //  }),
-    HealthCheckerModule,
     CloudinaryModule,
   ],
   providers: [],
