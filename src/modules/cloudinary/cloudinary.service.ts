@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
-import { CloudinaryResponse } from '@src/common/types/res-upload.type';
+import { CloudinaryResponse } from '@src/common/types/respone.type';
 
 @Injectable()
 export class CloudinaryService {
