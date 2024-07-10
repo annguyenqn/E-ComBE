@@ -11,11 +11,13 @@ import { SharedModule } from './common/shared/shared.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
+    ProductModule,
     ClsModule.forRoot({
       global: true,
       middleware: {

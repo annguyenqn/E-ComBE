@@ -27,8 +27,6 @@ export default async function bootstrapConfig(app: INestApplication) {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
       transform: true,
     }),
   );

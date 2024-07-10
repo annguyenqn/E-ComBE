@@ -1,9 +1,5 @@
 import { Order } from 'src/common/constants';
-import {
-  EnumFieldOptional,
-  NumberFieldOptional,
-  StringFieldOptional,
-} from 'src/common/decorators';
+import { EnumFieldOptional, NumberFieldOptional } from 'src/common/decorators';
 
 export class PageOptionsDto {
   @EnumFieldOptional(() => Order, {
@@ -29,7 +25,4 @@ export class PageOptionsDto {
   get skip(): number {
     return (this.page - 1) * this.take;
   }
-
-  @StringFieldOptional()
-  readonly q?: string;
 }

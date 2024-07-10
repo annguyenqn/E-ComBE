@@ -5,6 +5,9 @@ import { SharedModule } from '@src/common/shared/shared.module';
 import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { DatabaseModule } from 'src/common/database/database.module';
 import { SeedService } from './seed.service';
+import { CategoryEntity } from '@src/modules/product/entities/category.entity';
+import { ProductEntity } from '@src/modules/product/entities/product.entity';
+import { ProductImageEntity } from '@src/modules/product/entities/productImage.entity';
 
 @Module({
   imports: [
@@ -14,7 +17,12 @@ import { SeedService } from './seed.service';
       envFilePath: '.env',
     }),
     SharedModule,
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      CategoryEntity,
+      ProductEntity,
+      ProductImageEntity,
+    ]),
   ],
   providers: [SeedService],
 })

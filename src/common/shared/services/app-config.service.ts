@@ -16,6 +16,7 @@ import { OrderDetailEntity } from '@src/modules/order/entities/orderDetail.entit
 import { OrderHistoryEntity } from '@src/modules/order/entities/orderHistory.entity';
 import { PaymentEntity } from '@src/modules/payment/entities/payment.entity';
 import { ShippingEntity } from '@src/modules/shipping/entities/shipping.entity';
+import { ProductImageEntity } from '@src/modules/product/entities/productImage.entity';
 
 import { isNil } from 'lodash';
 import ms from 'ms';
@@ -125,6 +126,7 @@ export class AppConfigService {
         OrderHistoryEntity,
         PaymentEntity,
         ShippingEntity,
+        ProductImageEntity,
       ],
     };
   }
