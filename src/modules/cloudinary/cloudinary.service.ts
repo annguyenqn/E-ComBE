@@ -19,10 +19,6 @@ export class CloudinaryService {
         .upload_stream(
           {
             resource_type: 'auto',
-            transformation: [
-              { width: 150, height: 150, crop: 'fill' },
-              { quality: 'auto:low' },
-            ],
           },
           (error, result: UploadApiResponse | undefined) => {
             if (error) {

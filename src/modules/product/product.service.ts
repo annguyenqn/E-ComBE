@@ -32,6 +32,7 @@ export class ProductService {
       order: {
         id: order,
       },
+      relations: ['images'],
     });
 
     return {
