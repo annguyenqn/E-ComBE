@@ -12,6 +12,7 @@ import { PaginationDto } from '@src/common/dto/paginate.dto';
 import { CategoryEntity } from './entities/category.entity';
 import { CloudinaryService } from 'src/modules/cloudinary/cloudinary.service';
 import { ProductImageEntity } from './entities/productImage.entity';
+import { TagsEntity } from './entities/tags.entity';
 
 @Injectable()
 export class ProductService {
@@ -21,6 +22,8 @@ export class ProductService {
     @InjectRepository(CategoryEntity)
     private categoryRepository: Repository<CategoryEntity>,
     private readonly cloudinaryService: CloudinaryService,
+    @InjectRepository(TagsEntity)
+    private tagsRepository: Repository<TagsEntity>,
   ) {}
   async getProducts(
     pageOptionsDto: ProductPageOptionsDto,
@@ -50,13 +53,14 @@ export class ProductService {
     createProduct: CreateProductDto,
     files: Express.Multer.File[],
   ): Promise<ProductEntity> {
-    const { categories: categoryIds, ...productData } = createProduct;
+    const {
+      categories: categoryIds,
+      tags: tagIds,
+      ...productData
+    } = createProduct;
 
     const existingProduct = await this.productRepository.findOne({
-      where: [
-        { product_code: createProduct.product_code },
-        { name: createProduct.name },
-      ],
+      where: [{ sku: createProduct.sku }, { name: createProduct.name }],
     });
 
     if (existingProduct) {
@@ -67,6 +71,13 @@ export class ProductService {
       id: In(categoryIds),
     });
 
+    const tags = await this.tagsRepository.findBy({
+      id: In(tagIds),
+    });
+    if (!tags.length) {
+      throw new NotFoundException('One or more tags not found');
+    }
+
     if (!categories.length) {
       throw new NotFoundException('One or more categories not found');
     }
@@ -76,6 +87,7 @@ export class ProductService {
         const product = transactionalEntityManager.create(ProductEntity, {
           ...productData,
           categories,
+          tags,
         });
 
         const savedProduct = await transactionalEntityManager.save(product);

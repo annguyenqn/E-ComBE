@@ -8,6 +8,7 @@ import { SeedService } from './seed.service';
 import { CategoryEntity } from '@src/modules/product/entities/category.entity';
 import { ProductEntity } from '@src/modules/product/entities/product.entity';
 import { ProductImageEntity } from '@src/modules/product/entities/productImage.entity';
+import { TagsEntity } from '@src/modules/product/entities/tags.entity';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ProductImageEntity } from '@src/modules/product/entities/productImage.e
       CategoryEntity,
       ProductEntity,
       ProductImageEntity,
+      TagsEntity,
     ]),
   ],
   providers: [SeedService],

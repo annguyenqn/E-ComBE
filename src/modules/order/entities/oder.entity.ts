@@ -3,7 +3,6 @@ import { AbstractEntity } from '@src/common/abstract.entity';
 import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { OrderDetailEntity } from './orderDetail.entity';
 import { PaymentEntity } from '@src/modules/payment/entities/payment.entity';
-import { ShippingEntity } from '@src/modules/shipping/entities/shipping.entity';
 import { OrderHistoryEntity } from './orderHistory.entity';
 
 @Entity({ name: 'order' })
@@ -25,9 +24,6 @@ export class OrderEntity extends AbstractEntity {
 
   @OneToMany(() => PaymentEntity, (payment) => payment.order)
   payments: PaymentEntity[];
-
-  @OneToMany(() => ShippingEntity, (shipping) => shipping.order)
-  shippings: ShippingEntity[];
 
   @OneToMany(() => OrderHistoryEntity, (orderHistory) => orderHistory.order)
   orderHistories: OrderHistoryEntity[];

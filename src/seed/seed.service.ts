@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-// import { RoleType } from 'src/common/constants';
-// import { UserEntity } from '@src/modules/user/entities/user.entity';
+// // import { RoleType } from 'src/common/constants';
+// // import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { Repository } from 'typeorm/repository/Repository';
 import { CategoryEntity } from '@src/modules/product/entities/category.entity';
-import { Gender } from '@src/common/constants/gender';
 import { ProductEntity } from '@src/modules/product/entities/product.entity';
+import { TagsEntity } from '@src/modules/product/entities/tags.entity';
+import { In } from 'typeorm';
+import { ProductImageEntity } from '@src/modules/product/entities/productImage.entity';
 
 @Injectable()
 export class SeedService {
@@ -16,6 +18,8 @@ export class SeedService {
     private readonly categoryRepository: Repository<CategoryEntity>,
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
+    @InjectRepository(TagsEntity)
+    private readonly tagsRepository: Repository<TagsEntity>,
   ) {}
 
   async seed(): Promise<void> {
@@ -23,6 +27,7 @@ export class SeedService {
       //   this.seedCategories(),
       // this.seedAdmin(), this.seedUsers()
       this.seedProducts(),
+    // this.seedTags(),
     ]);
   }
 
@@ -162,252 +167,328 @@ export class SeedService {
   //     }
   //   }
 
-  productNames = {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    'T-Shirts': [
+//   productNames = [
+//       {
+//         name: 'Sunflower Jumpsuit',
+//         description:
+//           // eslint-disable-next-line max-len
+//           'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+//         url: [
+//           // eslint-disable-next-line no-secrets/no-secrets
+//           'http://res.cloudinary.com/dwreut3oh/image/upload/v1720970963/mk2c4wgmwgv1pniftzha.webp',
+//           'http://res.cloudinary.com/dwreut3oh/image/upload/v1720970964/nfulqeygjskz3m6acrjm.webp',
+//           "http://res.cloudinary.com/dwreut3oh/image/upload/v1720970962/wie8coq2ibkjmctwspvu.webp",
+//           "http://res.cloudinary.com/dwreut3oh/image/upload/v1720970965/x251ulrwg02pb0pizk4x.webp",
+//           "http://res.cloudinary.com/dwreut3oh/image/upload/v1720970968/n398opmgnyo7bfkpne9m.webp"
+//         ],
+//       tags: ['Cream', 'Casual', 'Female'],
+//       category: ['Dress'],
+//       },
+//       {
+//         name: 'Karatima Outerwear',
+//         description:
+//           // eslint-disable-next-line max-len
+//           'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+//         url: [
+//           "http://res.cloudinary.com/dwreut3oh/image/upload/v1720971222/l9cinjue7ys6iakfp5qj.webp",
+//           "http://res.cloudinary.com/dwreut3oh/image/upload/v1720971222/yvwfvu2cogbqcmapwnj9.webp"
+//         ],
+//       tags: ['Brown', 'Casual', 'Female'],
+//       category: ['Jacket'],
+//         },
+//       {
+//         name: 'Dark Olive Short Dress',
+//         description:
+//           // eslint-disable-next-line max-len
+//           'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+//         url: [
+//         'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971422/z32rj3jtcgi5pvyfmgyv.webp',
+//         'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971417/x2zusox6dhp1wflswpru.webp',
+//       ],
+//       tags: ['Green', 'Female'],
+//       category: ['Dress'],
+//     },
+//     {
+//         name: 'Dust Lightweight Jacket',
+//         description:
+//           // eslint-disable-next-line max-len
+//           'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+//         url: [
+//         'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971589/x8yqzies2jocyblgpjpa.webp',
+//         'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971586/igo9rzq1qnressapmee0.webp',
+//       ],
+//       tags: ['Cream', 'Female'],
+//       category: ['Jacket'],
+//     },
+//     {
+//         name: 'White Dressed Pants',
+//         description:
+//           // eslint-disable-next-line max-len
+//           'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+//         url: [
+//         'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971699/nefqvzi2c638n6dre6ae.webp',
+//         'https://res.cloudinary.com/dwreut3oh/image/upload/v1720971699/nefqvzi2c638n6dre6ae.webp',
+//       ],
+//       tags: ['Cream', 'Female'],
+//       category: ['Pants'],
+//     },
+//     {
+//         name: 'Leather Brown Outerwear',
+//         description:
+//           // eslint-disable-next-line max-len
+//           'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+//         url: [
+//         "http://res.cloudinary.com/dwreut3oh/image/upload/v1720971883/uejhjsgiwvjgd3eqqc0c.webp",
+//         "http://res.cloudinary.com/dwreut3oh/image/upload/v1720971883/zrv2jbalar1kft2n3j6r.webp",
+//         "http://res.cloudinary.com/dwreut3oh/image/upload/v1720971885/n5tanz54zpjiepuweog2.webp",
+//         "http://res.cloudinary.com/dwreut3oh/image/upload/v1720971884/szwlfoqdkdimcnlg8uf5.webp",
+//         "http://res.cloudinary.com/dwreut3oh/image/upload/v1720971885/vvfbfdvq0blzb0xjkpjo.webp",
+//       ],
+//       tags: ['Brown', 'Female'],
+//       category: ['Jacket'],
+//     },
+//     {
+//         name: 'Black Tall Jacket',
+//         description:
+//           // eslint-disable-next-line max-len
+//           'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+//         url: [
+//         "http://res.cloudinary.com/dwreut3oh/image/upload/v1720972060/g4bxwis4gxdhy3akp4ov.webp",
+//         "http://res.cloudinary.com/dwreut3oh/image/upload/v1720972059/i3ldph2cqbxzpgw3sbla.webp",
+//       ],
+//       tags: ['Black', 'Female'],
+//       category: ['Jacket'],
+//     },
+//   ];
+ 
+//   private async seedProducts() {
+
+
+//   async seedTags(): Promise<void> {
+//     const tags = [
+//       'White', 
+//       'Cream', 
+//       'Casual', 
+//       'Streetwear', 
+//       'Comfortable', 
+//       'Winter', 
+//       'Wool', 
+//       'Knit', 
+//       'Fall', 
+//       'Women', 
+//       'Female', 
+//       'High Waist', 
+//       'Pockets', 
+//       'Elastic Waistband', 
+//       'Button Closure', 
+//       'Everyday', 
+//       'Weekend', 
+//       'Travel',
+//       'Red', 
+//       'Blue', 
+//       'Green', 
+//       'Yellow', 
+//       'Black', 
+//       'Gray', 
+//       'Pink', 
+//       'Purple', 
+//       'Brown', 
+//       'Orange',
+//       'Black',
+//     ];
+
+//     const tagPromises = tags.map(async (tagName) => {
+//       const tag = await this.tagsRepository.findOneBy({ name: tagName });
+//       if (!tag) {
+//         const newTag = this.tagsRepository.create({ name: tagName });
+//         return this.tagsRepository.save(newTag);
+//       }
+//       return null;
+//     });
+
+//     await Promise.all(tagPromises);
+//   }
+
+  private async seedProducts(): Promise<void> {
+    const productNames = [
       {
-        name: 'Basic T-Shirt',
-        gender: Gender.UNISEX,
-        description: 'A basic comfortable t-shirt.',
+        name: 'Sunflower Jumpsuit',
+        sku: 'SFJ001',
+        description:
+          // eslint-disable-next-line max-len
+          'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+        url: [
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720970963/mk2c4wgmwgv1pniftzha.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720970964/nfulqeygjskz3m6acrjm.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720970962/wie8coq2ibkjmctwspvu.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720970965/x251ulrwg02pb0pizk4x.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720970968/n398opmgnyo7bfkpne9m.webp',
+        ],
+        tags: ['Cream', 'Casual', 'Female'],
+        category: ['Dress'],
       },
       {
-        name: 'Graphic T-Shirt',
-        gender: Gender.UNISEX,
-        description: 'A t-shirt with a graphic print.',
+        name: 'Karatima Outerwear',
+        sku: 'KO002',
+        description:
+          // eslint-disable-next-line max-len
+          'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+        url: [
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971222/l9cinjue7ys6iakfp5qj.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971222/yvwfvu2cogbqcmapwnj9.webp',
+        ],
+        tags: ['Brown', 'Casual', 'Female'],
+        category: ['Jacket'],
       },
       {
-        name: 'V-Neck T-Shirt',
-        gender: Gender.UNISEX,
-        description: 'A stylish v-neck t-shirt.',
-      },
-    ],
-    "Shirts": [
-      {
-        name: 'Formal Shirt',
-        gender: Gender.MALE,
-        description: 'A formal shirt for business meetings.',
-      },
-      {
-        name: 'Casual Shirt',
-        gender: Gender.MALE,
-        description: 'A casual shirt for everyday wear.',
+        name: 'Dark Olive Short Dress',
+        sku: 'DOSD003',
+        description:
+          // eslint-disable-next-line max-len
+          'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+        url: [
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971422/z32rj3jtcgi5pvyfmgyv.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971417/x2zusox6dhp1wflswpru.webp',
+        ],
+        tags: ['Green', 'Female'],
+        category: ['Dress'],
       },
       {
-        name: 'Linen Shirt',
-        gender: Gender.MALE,
-        description: 'A lightweight linen shirt.',
-      },
-    ],
-    "Hoodies": [
-      {
-        name: 'Pullover Hoodie',
-        gender: Gender.UNISEX,
-        description: 'A cozy pullover hoodie.',
-      },
-      {
-        name: 'Zip-Up Hoodie',
-        gender: Gender.UNISEX,
-        description: 'A comfortable zip-up hoodie.',
+        name: 'Dust Lightweight Jacket',
+        sku: 'DLJ004',
+        description:
+          // eslint-disable-next-line max-len
+          'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+        url: [
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971589/x8yqzies2jocyblgpjpa.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971586/igo9rzq1qnressapmee0.webp',
+        ],
+        tags: ['Cream', 'Female'],
+        category: ['Jacket'],
       },
       {
-        name: 'Graphic Hoodie',
-        gender: Gender.UNISEX,
-        description: 'A hoodie with a graphic design.',
-      },
-    ],
-    "Jeans": [
-      {
-        name: 'Skinny Jeans',
-        gender: Gender.UNISEX,
-        description: 'Stylish skinny jeans.',
-      },
-      {
-        name: 'Regular Fit Jeans',
-        gender: Gender.UNISEX,
-        description: 'Comfortable regular fit jeans.',
+        name: 'White Dressed Pants',
+        sku: 'WDP005',
+        description:
+          // eslint-disable-next-line max-len
+          'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+        url: [
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971699/nefqvzi2c638n6dre6ae.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'https://res.cloudinary.com/dwreut3oh/image/upload/v1720971699/nefqvzi2c638n6dre6ae.webp',
+        ],
+        tags: ['Cream', 'Female'],
+        category: ['Pants'],
       },
       {
-        name: 'Distressed Jeans',
-        gender: Gender.UNISEX,
-        description: 'Fashionable distressed jeans.',
-      },
-    ],
-    "Shorts": [
-      {
-        name: 'Cargo Shorts',
-        gender: Gender.UNISEX,
-        description: 'Durable cargo shorts.',
-      },
-      {
-        name: 'Denim Shorts',
-        gender: Gender.UNISEX,
-        description: 'Casual denim shorts.',
-      },
-      {
-        name: 'Athletic Shorts',
-        gender: Gender.UNISEX,
-        description: 'Comfortable athletic shorts.',
-      },
-    ],
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    'High-top Shoes': [
-      {
-        name: 'Basketball Shoes',
-        gender: Gender.UNISEX,
-        description: 'High-top basketball shoes.',
+        name: 'Leather Brown Outerwear',
+        sku: 'LBO006',
+        description:
+          // eslint-disable-next-line max-len
+          'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+        url: [
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971883/uejhjsgiwvjgd3eqqc0c.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971883/zrv2jbalar1kft2n3j6r.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971885/n5tanz54zpjiepuweog2.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971884/szwlfoqdkdimcnlg8uf5.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971885/vvfbfdvq0blzb0xjkpjo.webp',
+        ],
+        tags: ['Brown', 'Female'],
+        category: ['Jacket'],
       },
       {
-        name: 'Hiking Boots',
-        gender: Gender.UNISEX,
-        description: 'Sturdy hiking boots.',
+        name: 'Black Tall Jacket',
+        sku: 'BTJ007',
+        description:
+          // eslint-disable-next-line max-len
+          'Our products use finest materials and stunning design to create something special. Transformative colours, bold textiles and unique prints, natural fibres with high our quality craftsmanship design remains at forefront. We believe in creating unique products, so we use finest materials and stunning design to create special items.',
+        url: [
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720972060/g4bxwis4gxdhy3akp4ov.webp',
+          // eslint-disable-next-line no-secrets/no-secrets
+          'http://res.cloudinary.com/dwreut3oh/image/upload/v1720972059/i3ldph2cqbxzpgw3sbla.webp',
+        ],
+        tags: ['Black', 'Female'],
+        category: ['Jacket'],
       },
-      {
-        name: 'Fashion Sneakers',
-        gender: Gender.UNISEX,
-        description: 'Stylish high-top sneakers.',
-      },
-    ],
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    'Low-top Shoes': [
-      {
-        name: 'Casual Sneakers',
-        gender: Gender.UNISEX,
-        description: 'Comfortable low-top sneakers.',
-      },
-      {
-        name: 'Running Shoes',
-        gender: Gender.UNISEX,
-        description: 'Lightweight running shoes.',
-      },
-      {
-        name: 'Slip-On Shoes',
-        gender: Gender.UNISEX,
-        description: 'Easy to wear slip-on shoes.',
-      },
-    ],
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    'Leather Shoes': [
-      {
-        name: 'Dress Shoes',
-        gender: Gender.UNISEX,
-        description: 'Elegant leather dress shoes.',
-      },
-      {
-        name: 'Oxford Shoes',
-        gender: Gender.UNISEX,
-        description: 'Classic leather Oxford shoes.',
-      },
-      {
-        name: 'Loafers',
-        gender: Gender.UNISEX,
-        description: 'Comfortable leather loafers.',
-      },
-    ],
-    "Sneakers": [
-      {
-        name: 'Running Sneakers',
-        gender: Gender.UNISEX,
-        description: 'Performance running sneakers.',
-      },
-      {
-        name: 'Casual Sneakers',
-        gender: Gender.UNISEX,
-        description: 'Versatile casual sneakers.',
-      },
-      {
-        name: 'High-Performance Sneakers',
-        gender: Gender.UNISEX,
-        description: 'High-performance sneakers.',
-      },
-    ],
-    "Necklaces": [
-      {
-        name: 'Gold Necklace',
-        gender: Gender.UNISEX,
-        description: 'Elegant gold necklace.',
-      },
-      {
-        name: 'Silver Necklace',
-        gender: Gender.UNISEX,
-        description: 'Stylish silver necklace.',
-      },
-      {
-        name: 'Pendant Necklace',
-        gender: Gender.UNISEX,
-        description: 'Necklace with a beautiful pendant.',
-      },
-    ],
-    "Bracelets": [
-      {
-        name: 'Leather Bracelet',
-        gender: Gender.UNISEX,
-        description: 'Fashionable leather bracelet.',
-      },
-      {
-        name: 'Beaded Bracelet',
-        gender: Gender.UNISEX,
-        description: 'Chic beaded bracelet.',
-      },
-      {
-        name: 'Cuff Bracelet',
-        gender: Gender.UNISEX,
-        description: 'Stylish cuff bracelet.',
-      },
-    ],
-    "Chains": [
-      {
-        name: 'Gold Chain',
-        gender: Gender.UNISEX,
-        description: 'Elegant gold chain.',
-      },
-      {
-        name: 'Silver Chain',
-        gender: Gender.UNISEX,
-        description: 'Stylish silver chain.',
-      },
-      {
-        name: 'Platinum Chain',
-        gender: Gender.UNISEX,
-        description: 'Luxurious platinum chain.',
-      },
-    ],
-  };
-  private generateProductCode(length: number): string {
-    // eslint-disable-next-line no-secrets/no-secrets
-    const characters =
-      // eslint-disable-next-line no-secrets/no-secrets
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
-  private async seedProducts() {
-    const categories = await this.categoryRepository.find({
-      relations: ['children'],
-    });
-    for (const category of categories) {
-      for (const subCategory of category.children) {
-        const subCategoryProducts = this.productNames[subCategory.name] || [];
-        for (let i = 0; i < 10; i++) {
-          const productData =
-            subCategoryProducts[i % subCategoryProducts.length];
-          const product = this.productRepository.create({
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            product_code: this.generateProductCode(
-              5 + Math.floor(Math.random() * 2),
-            ),
-            name: `${productData.name} ${i + 1}`,
-            gender: productData.gender,
-            description: productData.description,
-            categories: [subCategory],
-          });
-          // eslint-disable-next-line no-await-in-loop
-          await this.productRepository.save(product);
-        }
+    ];
+
+    for (const productData of productNames) {
+      const { name, description, url, tags, category, sku } = productData;
+
+      // eslint-disable-next-line no-await-in-loop
+      const existingProduct = await this.productRepository.findOne({
+        where: [{ name }],
+      });
+
+      if (existingProduct) {
+        console.log(`Product with name ${name} already exists`);
+        continue;
       }
+
+      // eslint-disable-next-line no-await-in-loop
+      const categories = await this.categoryRepository.find({
+        where: { name: In(category) },
+      });
+
+      if (!categories.length) {
+        throw new NotFoundException('One or more categories not found');
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      const tagEntities = await this.tagsRepository.find({
+        where: { name: In(tags) },
+      });
+
+      if (!tagEntities.length) {
+        throw new NotFoundException('One or more tags not found');
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      await this.productRepository.manager.transaction(
+        async (transactionalEntityManager) => {
+          const product = transactionalEntityManager.create(ProductEntity, {
+            sku,
+            name,
+            description,
+            categories,
+            tags: tagEntities,
+          });
+
+          const savedProduct = await transactionalEntityManager.save(product);
+
+          const productImages = url.map((imageUrl) => {
+            const image = new ProductImageEntity();
+            image.url = imageUrl;
+            image.product = savedProduct;
+            return image;
+          });
+
+          if (productImages.length > 0) {
+            await transactionalEntityManager.save(
+              ProductImageEntity,
+              productImages,
+            );
+          }
+        },
+      );
     }
   }
 }

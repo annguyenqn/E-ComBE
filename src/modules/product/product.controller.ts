@@ -30,18 +30,6 @@ export class ProductController {
     @Body(new ValidationPipe({ transform: true }))
     createProductDto: CreateProductDto,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    // const createProductDtoFinal = {
-    //   ...createProductDto,
-    //   categories: createProductDto.categories.map(Number),
-    // };
-    // return {
-    //   data: {
-    //     createProductDto,
-    //     files,
-    //   },
-    // };
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return this.productService.createProducts(createProductDto, files);
   }
 

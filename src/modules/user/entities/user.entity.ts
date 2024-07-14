@@ -3,9 +3,6 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@src/common/abstract.entity';
 import { Exclude } from 'class-transformer';
 import { RoleType } from 'src/common/constants';
-import { ReviewEntity } from '@src/modules/product/entities/review.entity';
-import { WishlistEntity } from '@src/modules/product/entities/wishlist.entity';
-import { CartEntity } from '@src/modules/cart/entities/cart.entity';
 import { OrderEntity } from '@src/modules/order/entities/oder.entity';
 
 @Entity({ name: 'users' })
@@ -44,15 +41,6 @@ export class UserEntity extends AbstractEntity {
   @Exclude()
   hashRecoveryToken!: string | null;
 
-  @OneToMany(() => ReviewEntity, (review) => review.user)
-  reviews: ReviewEntity[];
-
-  @OneToMany(() => WishlistEntity, (wishlist) => wishlist.user)
-  wishlists: WishlistEntity[];
-
   @OneToMany(() => OrderEntity, (order) => order.user)
   orders: OrderEntity[];
-
-  @OneToMany(() => CartEntity, (cart) => cart.user)
-  carts: CartEntity[];
 }

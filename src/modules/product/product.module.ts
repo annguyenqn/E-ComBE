@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductImageEntity } from './entities/productImage.entity';
 import { CloudinaryModule } from 'src/modules/cloudinary/cloudinary.module';
 import { CloudinaryService } from 'src/modules/cloudinary/cloudinary.service';
+import { TagsEntity } from './entities/tags.entity';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CloudinaryService } from 'src/modules/cloudinary/cloudinary.service';
       CategoryEntity,
       ProductEntity,
       ProductImageEntity,
+      TagsEntity,
     ]),
   ],
   controllers: [ProductController],

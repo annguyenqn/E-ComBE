@@ -1,7 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@src/common/abstract.entity';
 import { ProductEntity } from './product.entity';
-import { CartItemEntity } from '@src/modules/cart/entities/cartItem.entity';
 import { OrderDetailEntity } from '@src/modules/order/entities/orderDetail.entity';
 
 @Entity({ name: 'inventory' })
@@ -11,9 +10,6 @@ export class InventoryEntity extends AbstractEntity {
 
   @Column({ type: 'varchar', length: 30 })
   color: string;
-
-  @Column({ type: 'varchar', length: 10 })
-  sex: string;
 
   @Column({ type: 'varchar', length: 10 })
   size: string;
@@ -32,9 +28,6 @@ export class InventoryEntity extends AbstractEntity {
 
   @ManyToOne(() => ProductEntity, (product) => product.inventories)
   product: ProductEntity;
-
-  @OneToMany(() => CartItemEntity, (cartItem) => cartItem.inventory)
-  cartItems: CartItemEntity[];
 
   @OneToMany(() => OrderDetailEntity, (orderDetail) => orderDetail.inventory)
   orderDetails: OrderDetailEntity[];

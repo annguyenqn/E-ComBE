@@ -15,7 +15,7 @@ export class CreateProductDto {
   @IsString()
   @ApiProperty({ example: 'abvc12' })
   @Length(1, 50)
-  product_code: string;
+  sku: string;
 
   @IsString()
   @ApiProperty({ example: 'áo thun q1' })
@@ -37,6 +37,13 @@ export class CreateProductDto {
   @Type(() => Number)
   @ApiProperty({ type: [Number], example: [1] })
   categories: number[];
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsNumber({}, { each: true })
+  @Type(() => Number)
+  @ApiProperty({ type: [Number], example: [1, 2, 3] })
+  tags: number[];
 
   @ApiProperty({ type: 'string', format: 'binary' })
   files: Express.Multer.File[];

@@ -7,17 +7,12 @@ import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { ProductEntity } from '@src/modules/product/entities/product.entity';
 import { CategoryEntity } from '@src/modules/product/entities/category.entity';
 import { InventoryEntity } from '@src/modules/product/entities/inventory.entity';
-import { ReviewEntity } from '@src/modules/product/entities/review.entity';
-import { WishlistEntity } from '@src/modules/product/entities/wishlist.entity';
-import { CartEntity } from '@src/modules/cart/entities/cart.entity';
-import { CartItemEntity } from '@src/modules/cart/entities/cartItem.entity';
 import { OrderEntity } from '@src/modules/order/entities/oder.entity';
 import { OrderDetailEntity } from '@src/modules/order/entities/orderDetail.entity';
 import { OrderHistoryEntity } from '@src/modules/order/entities/orderHistory.entity';
 import { PaymentEntity } from '@src/modules/payment/entities/payment.entity';
-import { ShippingEntity } from '@src/modules/shipping/entities/shipping.entity';
 import { ProductImageEntity } from '@src/modules/product/entities/productImage.entity';
-
+import { TagsEntity } from '@src/modules/product/entities/tags.entity';
 import { isNil } from 'lodash';
 import ms from 'ms';
 import { default as parse, type Units } from 'parse-duration';
@@ -117,16 +112,12 @@ export class AppConfigService {
         ProductEntity,
         CategoryEntity,
         InventoryEntity,
-        ReviewEntity,
-        WishlistEntity,
-        CartEntity,
-        CartItemEntity,
         OrderEntity,
         OrderDetailEntity,
         OrderHistoryEntity,
         PaymentEntity,
-        ShippingEntity,
         ProductImageEntity,
+        TagsEntity,
       ],
     };
   }
