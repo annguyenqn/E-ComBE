@@ -12,7 +12,6 @@ import { ProductService } from './product.service';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from '@src/common/dto/paginate.dto';
 import { ProductPageOptionsDto } from './dtos/ProductPageOptionsDto';
-// import { CreateProductDto } from './dtos/createProduct.dto';
 import { ProductEntity } from './entities/product.entity';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateProductDto } from './dtos/createProduct.dto';
@@ -39,5 +38,13 @@ export class ProductController {
     pageOptionsDto: ProductPageOptionsDto,
   ): Promise<PaginationDto<ProductEntity>> {
     return this.productService.getProducts(pageOptionsDto);
+  }
+
+  @Get('detail')
+  getProduct(
+    @Query('productName')
+    productName: string,
+  ) {
+    return this.productService.getProductDetail(productName);
   }
 }

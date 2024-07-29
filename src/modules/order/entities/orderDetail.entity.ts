@@ -1,7 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '@src/common/abstract.entity';
 import { OrderEntity } from './oder.entity';
-import { InventoryEntity } from '@src/modules/product/entities/inventory.entity';
 
 @Entity({ name: 'order_detail' })
 export class OrderDetailEntity extends AbstractEntity {
@@ -19,7 +18,4 @@ export class OrderDetailEntity extends AbstractEntity {
 
   @ManyToOne(() => OrderEntity, (order) => order.orderDetails)
   order: OrderEntity;
-
-  @ManyToOne(() => InventoryEntity, (inventory) => inventory.orderDetails)
-  inventory: InventoryEntity;
 }

@@ -8,6 +8,7 @@ import { ProductImageEntity } from './entities/productImage.entity';
 import { CloudinaryModule } from 'src/modules/cloudinary/cloudinary.module';
 import { CloudinaryService } from 'src/modules/cloudinary/cloudinary.service';
 import { TagsEntity } from './entities/tags.entity';
+import { InventoryEntity } from './entities/inventory.entity';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TagsEntity } from './entities/tags.entity';
       ProductEntity,
       ProductImageEntity,
       TagsEntity,
+      InventoryEntity,
     ]),
   ],
   controllers: [ProductController],

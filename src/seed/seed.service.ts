@@ -8,6 +8,7 @@ import { ProductEntity } from '@src/modules/product/entities/product.entity';
 import { TagsEntity } from '@src/modules/product/entities/tags.entity';
 import { In } from 'typeorm';
 import { ProductImageEntity } from '@src/modules/product/entities/productImage.entity';
+import { InventoryEntity } from '@src/modules/product/entities/inventory.entity';
 
 @Injectable()
 export class SeedService {
@@ -329,6 +330,11 @@ export class SeedService {
           // eslint-disable-next-line no-secrets/no-secrets
           'http://res.cloudinary.com/dwreut3oh/image/upload/v1720970968/n398opmgnyo7bfkpne9m.webp',
         ],
+        inventories: [
+          { size: 'M', quantity: 10 },
+          { size: 'L', quantity: 20 },
+        ],
+        price: 5000,
         tags: ['Cream', 'Casual', 'Female'],
         category: ['Dress'],
       },
@@ -344,6 +350,12 @@ export class SeedService {
           // eslint-disable-next-line no-secrets/no-secrets
           'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971222/yvwfvu2cogbqcmapwnj9.webp',
         ],
+        inventories: [
+          { size: 'M', quantity: 10 },
+          { size: 'L', quantity: 20 },
+          { size: 'XL', quantity: 30 },
+        ],
+        price: 10000,
         tags: ['Brown', 'Casual', 'Female'],
         category: ['Jacket'],
       },
@@ -359,6 +371,12 @@ export class SeedService {
           // eslint-disable-next-line no-secrets/no-secrets
           'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971417/x2zusox6dhp1wflswpru.webp',
         ],
+        inventories: [
+            { size: 'M', quantity: 10 },
+            { size: 'L', quantity: 20 },
+            { size: 'XL', quantity: 30 },
+          ],
+          price: 20000,
         tags: ['Green', 'Female'],
         category: ['Dress'],
       },
@@ -374,6 +392,12 @@ export class SeedService {
           // eslint-disable-next-line no-secrets/no-secrets
           'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971586/igo9rzq1qnressapmee0.webp',
         ],
+        inventories: [
+            { size: 'M', quantity: 10 },
+            { size: 'L', quantity: 20 },
+            { size: 'XL', quantity: 30 },
+          ],
+          price: 4000,
         tags: ['Cream', 'Female'],
         category: ['Jacket'],
       },
@@ -389,6 +413,12 @@ export class SeedService {
           // eslint-disable-next-line no-secrets/no-secrets
           'https://res.cloudinary.com/dwreut3oh/image/upload/v1720971699/nefqvzi2c638n6dre6ae.webp',
         ],
+        inventories: [
+            { size: 'M', quantity: 10 },
+            { size: 'L', quantity: 20 },
+            { size: 'XL', quantity: 30 },
+          ],
+          price: 4200,
         tags: ['Cream', 'Female'],
         category: ['Pants'],
       },
@@ -410,6 +440,12 @@ export class SeedService {
           // eslint-disable-next-line no-secrets/no-secrets
           'http://res.cloudinary.com/dwreut3oh/image/upload/v1720971885/vvfbfdvq0blzb0xjkpjo.webp',
         ],
+        inventories: [
+            { size: 'M', quantity: 10 },
+            { size: 'L', quantity: 20 },
+            { size: 'XL', quantity: 30 },
+          ],
+          price: 6800,
         tags: ['Brown', 'Female'],
         category: ['Jacket'],
       },
@@ -425,13 +461,28 @@ export class SeedService {
           // eslint-disable-next-line no-secrets/no-secrets
           'http://res.cloudinary.com/dwreut3oh/image/upload/v1720972059/i3ldph2cqbxzpgw3sbla.webp',
         ],
+        inventories: [
+            { size: 'M', quantity: 10 },
+            { size: 'L', quantity: 20 },
+            { size: 'XL', quantity: 30 },
+          ],
+          price: 2300,
         tags: ['Black', 'Female'],
         category: ['Jacket'],
       },
     ];
 
     for (const productData of productNames) {
-      const { name, description, url, tags, category, sku } = productData;
+      const {
+        name,
+        description,
+        url,
+        tags,
+        category,
+        sku,
+        price,
+        inventories,
+      } = productData;
 
       // eslint-disable-next-line no-await-in-loop
       const existingProduct = await this.productRepository.findOne({
@@ -468,6 +519,7 @@ export class SeedService {
             sku,
             name,
             description,
+            price,
             categories,
             tags: tagEntities,
           });
@@ -480,11 +532,22 @@ export class SeedService {
             image.product = savedProduct;
             return image;
           });
+          const productInventories = inventories.map((inventoryItem) => {
+            const inventory = new InventoryEntity();
+            inventory.size = inventoryItem.size;
+            inventory.quantity = inventoryItem.quantity;
+            inventory.product = savedProduct;
+            return inventory;
+          });
 
-          if (productImages.length > 0) {
+          if (productImages.length > 0 && inventories.length > 0) {
             await transactionalEntityManager.save(
               ProductImageEntity,
               productImages,
+            );
+            await transactionalEntityManager.save(
+              InventoryEntity,
+              productInventories,
             );
           }
         },

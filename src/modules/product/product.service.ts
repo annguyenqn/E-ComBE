@@ -13,6 +13,7 @@ import { CategoryEntity } from './entities/category.entity';
 import { CloudinaryService } from 'src/modules/cloudinary/cloudinary.service';
 import { ProductImageEntity } from './entities/productImage.entity';
 import { TagsEntity } from './entities/tags.entity';
+import { InventoryEntity } from './entities/inventory.entity';
 
 @Injectable()
 export class ProductService {
@@ -48,6 +49,16 @@ export class ProductService {
       page,
     };
   }
+  async getProductDetail(name: string) {
+    const product = await this.productRepository.findOne({
+      where: { name },
+      relations: ['images', 'tags'],
+    });
+    if (!product) {
+      throw new NotFoundException('Product is not found');
+    }
+    return product;
+  }
 
   async createProducts(
     createProduct: CreateProductDto,
@@ -56,6 +67,7 @@ export class ProductService {
     const {
       categories: categoryIds,
       tags: tagIds,
+      inventories: inventories,
       ...productData
     } = createProduct;
 
@@ -101,11 +113,22 @@ export class ProductService {
           image.product = savedProduct;
           return image;
         });
+        const productInventories = inventories.map((inventoryItem) => {
+          const inventory = new InventoryEntity();
+          inventory.size = inventoryItem.size;
+          inventory.quantity = inventoryItem.quantity;
+          inventory.product = savedProduct;
+          return inventory;
+        });
 
-        if (productImages.length > 0) {
+        if (productImages && productInventories) {
           await transactionalEntityManager.save(
             ProductImageEntity,
             productImages,
+          );
+          await transactionalEntityManager.save(
+            InventoryEntity,
+            productInventories,
           );
         }
         return savedProduct;

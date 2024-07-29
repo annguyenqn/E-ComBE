@@ -6,11 +6,21 @@ import {
   IsArray,
   ArrayNotEmpty,
   IsNumber,
+  ValidateNested,
 } from 'class-validator';
 import { Gender } from '@src/common/constants/gender';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 
+
+class InventoryDto {
+  @IsString()
+  @ApiProperty({ example: 'M' })
+  size: string;
+  @IsNumber()
+  @ApiProperty({ example: 10 })
+  quantity: number;
+}
 export class CreateProductDto {
   @IsString()
   @ApiProperty({ example: 'abvc12' })
@@ -30,6 +40,25 @@ export class CreateProductDto {
   @IsOptional()
   @ApiProperty({ example: 'áo thun q1', required: false })
   description?: string;
+
+  @IsNumber()
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  @Transform(({ value }) => parseFloat(value))
+  @ApiProperty({ example: 2000, required: true })
+  price: number;
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => InventoryDto)
+  @ApiProperty({
+    type: [InventoryDto],
+    example: [
+      { size: 'M', quantity: 10 },
+      { size: 'L', quantity: 20 },
+    ],
+  })
+  inventories: InventoryDto[];
 
   @IsArray()
   @ArrayNotEmpty()

@@ -16,6 +16,9 @@ export class ProductEntity extends AbstractEntity {
   @Column({ type: 'text', nullable: true })
   description: string;
 
+  @Column({ type: 'numeric', precision: 10, scale: 2, nullable: false })
+  price: number;
+
   @OneToMany(() => InventoryEntity, (inventory) => inventory.product)
   inventories: InventoryEntity[];
 
